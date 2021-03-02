@@ -71,4 +71,22 @@
     photino->InvokeMoved(x, y);
 }
 
+- (bool)windowShouldClose:(NSWindow *)sender {
+    NSAlert *alert = [[NSAlert alloc] init];
+    [alert addButtonWithTitle:@"Yes"];
+    [alert addButtonWithTitle:@"No"];
+    [alert setMessageText:@"Are you sure you want to quit?"];
+    // [alert setInformativeText:@"Quiting will stop the machine, please make sure it is back to its origin."];
+    [alert setAlertStyle:NSAlertStyleWarning];
+    [alert setShowsSuppressionButton:YES];
+    NSInteger result = [alert runModal];
+
+    if ( result == NSAlertFirstButtonReturn ) {
+        photino->InvokeClosing(result);
+        return true;
+    } else {
+        return false;
+    }
+}
+
 @end

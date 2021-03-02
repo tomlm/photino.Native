@@ -46,10 +46,10 @@ Photino::Photino(AutoString title, Photino* parent, WebMessageReceivedCallback w
         backing: NSBackingStoreBuffered
         defer: false];
     
-    if (fullscreen != nil)
-    {
-        [window fullscreen:bool(fullscreen)];
-    }
+    // if (fullscreen != nil)
+    // {
+    //     [window fullscreen:bool(fullscreen)];
+    // }
     
     _window = window;
 
@@ -109,6 +109,7 @@ void Photino::AttachWebView()
     // TODO: Remove these observers when the window is closed
     [[NSNotificationCenter defaultCenter] addObserver:uiDelegate selector:@selector(windowDidResize:) name:NSWindowDidResizeNotification object:window];
     [[NSNotificationCenter defaultCenter] addObserver:uiDelegate selector:@selector(windowDidMove:) name:NSWindowDidMoveNotification object:window];
+    [[NSNotificationCenter defaultCenter] addObserver:uiDelegate selector:@selector(windowShouldClose:) name:NSWindowWillCloseNotification object:window];
 
     _webview = webView;
 }
@@ -125,7 +126,8 @@ void Photino::Show()
 
 void Photino::Close()
 {
-	//
+    NSWindow * window = (NSWindow*)_window;
+    [window close];
 }
 
 void Photino::SetTitle(AutoString title)

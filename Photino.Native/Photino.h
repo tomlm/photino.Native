@@ -33,6 +33,9 @@ typedef int (*GetAllMonitorsCallback)(const Monitor* monitor);
 typedef void (*ResizedCallback)(int width, int height);
 typedef void (*MovedCallback)(int x, int y);
 typedef void (*ClosingCallback)();
+// Suggestion:
+// Add parameter that indicates whether the window is actually closing
+// typedef void (*ClosingCallback)(bool close);
 
 class Photino
 {
@@ -94,6 +97,9 @@ public:
 	void SetClosingCallback(ClosingCallback callback) { _closingCallback = callback; }
 	void InvokeMoved(int x, int y) { if (_movedCallback) _movedCallback(x, y); }
 	void InvokeClosing() { if (_closingCallback) _closingCallback(); }
+	// Suggestion:
+    // Add parameter that indicates whether the window is actually closing
+    // void InvokeClosing(bool close) { if (_closingCallback) _closingCallback(close); }
 	void SetTopmost(bool topmost);
 	void SetIconFile(AutoString filename);
 };
