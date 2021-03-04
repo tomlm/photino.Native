@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <iostream>
 #include <map>
 
 #include "../Shared/Photino.h"
@@ -9,8 +10,16 @@
 
 using namespace std;
 
+void Log(std::string message)
+{
+    std::cout << message << std::endl;
+}
+
 void Photino::Register()
 {
+    // Log("void Photino::Register()");
+    // Log("Registering macOS");
+
     [NSAutoreleasePool new];
     [NSApplication sharedApplication];
     [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
@@ -29,6 +38,8 @@ void Photino::Register()
     PhotinoAppDelegate * appDelegate = [[[PhotinoAppDelegate alloc] init] autorelease];
     NSApplication * application = [NSApplication sharedApplication];
     [application setDelegate:appDelegate];
+
+    // Log("Registered macOS");
 }
 
 Photino::Photino(
@@ -41,6 +52,8 @@ Photino::Photino(
     int width,
     int height)
 {
+    // Log("Photino::Photino()");
+
     _webMessageReceivedCallback = webMessageReceivedCallback;
     
     // Create Window
@@ -57,13 +70,17 @@ Photino::Photino(
         backing: NSBackingStoreBuffered
         defer: false
     ];
+    _webView = nil;
 
     this->SetTitle(title);
-    this->AttachWebView();
+
+    // Log("Constructed PhotinoWindow: ");
 }
 
 Photino::~Photino()
 {
+    // Log("Photino::~Photino()");
+
     [_webViewConfiguration release];
     [_webView release];
     [_window release];
@@ -71,6 +88,9 @@ Photino::~Photino()
 
 void Photino::AttachWebView()
 {
+    // Log("void Photino::AttachWebView()");
+    // Log("Attach WebView to PhotinoWindow");
+    
     // Javascript Extension Methods
     NSString* photinoWindowExtensions = @"\n"
     "   window.__receiveMessageCallbacks = [];\n"
@@ -85,7 +105,7 @@ void Photino::AttachWebView()
     "   };\n"
     "   \n"
     "   window.external = {\n"
-    "       postMessage: function(message)\n"
+    "       sendMessage: function(message)\n"
     "       {\n"
     "           window.webkit\n"
     "               .messageHandlers\n"
@@ -176,27 +196,37 @@ void Photino::AttachWebView()
 
 void Photino::Show()
 {
+    // Log("void Photino::Show()");
+    if (_webView == nil)
+    {
+        this->AttachWebView();
+    }
+
     [_window makeKeyAndOrderFront: nil];
 }
 
 void Photino::Close()
 {
+    // Log("void Photino::Close()");
     [_window close];
 }
 
 void Photino::SetTitle(AutoString title)
 {
+    // Log("void Photino::SetTitle(AutoString title)");
     NSString* nstitle = [[NSString stringWithUTF8String:title] autorelease];
     [_window setTitle:nstitle];
 }
 
 void Photino::WaitForExit()
 {
+    // Log("void Photino::WaitForExit()");
     [NSApp run];
 }
 
 void Photino::Invoke(ACTION callback)
 {
+    // Log("void Photino::Invoke(ACTION callback)");
     dispatch_sync(dispatch_get_main_queue(), ^(void){
         callback();
     });
@@ -215,6 +245,7 @@ void EnsureInvoke(dispatch_block_t block)
 
 void Photino::ShowMessage(AutoString title, AutoString body, unsigned int type)
 {
+    // Log("void Photino::ShowMessage(AutoString title, AutoString body, unsigned int type)");
     EnsureInvoke(^{
         NSString* nstitle = [[NSString stringWithUTF8String:title] autorelease];
         NSString* nsbody= [[NSString stringWithUTF8String:body] autorelease];
@@ -227,12 +258,14 @@ void Photino::ShowMessage(AutoString title, AutoString body, unsigned int type)
 
 void Photino::NavigateToString(AutoString content)
 {
+    // Log("void Photino::NavigateToString(AutoString content)");
     NSString* nscontent = [[NSString stringWithUTF8String:content] autorelease];
     [_webView loadHTMLString: nscontent baseURL: nil];
 }
 
 void Photino::NavigateToUrl(AutoString url)
 {
+    // Log("void Photino::NavigateToUrl(AutoString url)");
     NSString* nsurlstring = [[NSString stringWithUTF8String:url] autorelease];
     NSURL *nsurl= [[NSURL URLWithString:nsurlstring] autorelease];
     NSURLRequest *nsrequest= [[NSURLRequest requestWithURL:nsurl] autorelease];
@@ -241,6 +274,7 @@ void Photino::NavigateToUrl(AutoString url)
 
 void Photino::SendWebMessage(AutoString message)
 {
+    // Log("void Photino::SendWebMessage(AutoString message)");
     // JSON-encode the message
     NSString* nsmessage = [NSString stringWithUTF8String:message];
     NSData* data = [NSJSONSerialization dataWithJSONObject:@[nsmessage] options:0 error:nil];
@@ -255,6 +289,7 @@ void Photino::SendWebMessage(AutoString message)
 
 void Photino::AddCustomScheme(AutoString scheme, WebResourceRequestedCallback requestHandler)
 {
+    // Log("void Photino::AddCustomScheme(AutoString scheme, WebResourceRequestedCallback requestHandler)");
     // Note that this can only be done *before* the WKWebView is instantiated, so we only let this
     // get called from the options callback in the constructor
     PhotinoUrlSchemeHandler* schemeHandler = [[[PhotinoUrlSchemeHandler alloc] init] autorelease];
@@ -266,6 +301,7 @@ void Photino::AddCustomScheme(AutoString scheme, WebResourceRequestedCallback re
 
 void Photino::SetResizable(bool resizable)
 {
+    // Log("void Photino::SetResizable(bool resizable)");
     if (resizable)
     {
         _window.styleMask |= NSWindowStyleMaskResizable;
@@ -278,6 +314,7 @@ void Photino::SetResizable(bool resizable)
 
 void Photino::GetSize(int* width, int* height)
 {
+    // Log("void Photino::GetSize(int* width, int* height)");
     NSSize size = [_window frame].size;
     if (width) *width = (int)roundf(size.width);
     if (height) *height = (int)roundf(size.height);
@@ -285,6 +322,7 @@ void Photino::GetSize(int* width, int* height)
 
 void Photino::SetSize(int width, int height)
 {
+    // Log("void Photino::SetSize(int width, int height)");
     CGFloat fw = (CGFloat)width;
     CGFloat fh = (CGFloat)height;
     
@@ -301,6 +339,7 @@ void Photino::SetSize(int width, int height)
 
 void Photino::GetPosition(int* x, int* y)
 {
+    // Log("void Photino::GetPosition(int* x, int* y)");
     NSRect frame = [_window frame];
 
     if (x) *x = (int)roundf(frame.origin.x);
@@ -309,6 +348,7 @@ void Photino::GetPosition(int* x, int* y)
 
 void Photino::SetPosition(int x, int y)
 {
+    // Log("void Photino::SetPosition(int x, int y)");
     NSRect frame = [_window frame];
     
     frame.origin.x = (CGFloat)x;
@@ -319,44 +359,48 @@ void Photino::SetPosition(int x, int y)
 
 void Photino::GetAllMonitors(GetAllMonitorsCallback callback)
 {
+    // Log("void Photino::GetAllMonitors(GetAllMonitorsCallback callback)");
     if (callback)
     {
         for (NSScreen* screen in [NSScreen screens])
         {
             NSRect monitorFrame = [screen frame];
-            MonitorRect monitorArea;
-            monitorArea.x = (int)roundf(monitorFrame.origin.x);
-            monitorArea.y = (int)roundf(monitorFrame.origin.y);
-            monitorArea.width = (int)roundf(monitorFrame.size.width);
-            monitorArea.height = (int)roundf(monitorFrame.size.height);
+            MonitorRect monitorArea(
+                (int)roundf(monitorFrame.origin.x),
+                (int)roundf(monitorFrame.origin.y),
+                (int)roundf(monitorFrame.size.width),
+                (int)roundf(monitorFrame.size.height));
 
             NSRect workFrame = [screen visibleFrame];
-            MonitorRect workArea;
-            workArea.x = (int)roundf(workFrame.origin.x);
-            workArea.y = (int)roundf(workFrame.origin.y);
-            workArea.width = (int)roundf(workFrame.size.width);
-            workArea.height = (int)roundf(workFrame.size.height);
+            MonitorRect workArea(
+                (int)roundf(workFrame.origin.x),
+                (int)roundf(workFrame.origin.y),
+                (int)roundf(workFrame.size.width),
+                (int)roundf(workFrame.size.height));
 
-            Monitor props(monitorArea, workArea);
+            Monitor monitor(monitorArea, workArea);
 
-            callback(&props);
+            callback(&monitor);
         }
     }
 }
 
 unsigned int Photino::GetScreenDpi()
 {
+    // Log("unsigned int Photino::GetScreenDpi()");
 	return 72;
 }
 
 void Photino::SetTopmost(bool topmost)
 {
+    // Log("void Photino::SetTopmost(bool topmost)");
     if (topmost) [_window setLevel:NSFloatingWindowLevel];
     else [_window setLevel:NSNormalWindowLevel];
 }
 
 void Photino::SetIconFile(AutoString filename)
 {
+    // Log("void Photino::SetIconFile(AutoString filename)");
 	NSString* path = [[NSString stringWithUTF8String: filename] autorelease];
     NSImage* icon = [[[NSImage alloc] initWithContentsOfFile: path] autorelease];
 
