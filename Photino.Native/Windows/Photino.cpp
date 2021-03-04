@@ -1,4 +1,3 @@
-#include "Photino.h"
 #include <stdio.h>
 #include <map>
 #include <mutex>
@@ -7,6 +6,8 @@
 #include <atomic>
 #include <Shlwapi.h>
 #include <wrl.h>
+
+#include "../Shared/Photino.h"
 
 #define WM_USER_SHOWMESSAGE (WM_USER + 0x0001)
 #define WM_USER_INVOKE (WM_USER + 0x0002)

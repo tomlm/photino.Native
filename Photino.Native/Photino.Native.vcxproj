@@ -147,12 +147,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Exports.cpp" />
-    <ClCompile Include="Photino.Linux.cpp" />
-    <ClCompile Include="Photino.Windows.cpp" />
+    <ClCompile Include="Shared\Exports.cpp" />
+    <ClCompile Include="Linux\Photino.cpp" />
+    <ClCompile Include="Windows\Photino.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Photino.h" />
+    <ClInclude Include="Shared\Photino.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

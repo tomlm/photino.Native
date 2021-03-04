@@ -64,7 +64,7 @@ jobs:
       condition: eq(variables.rid, 'linux-x64')
       inputs:
         workingDirectory: './Photino.Native'
-        script: 'gcc -std=c++11 -shared -DOS_LINUX Exports.cpp Photino.Linux.cpp -o x64/$(buildConfiguration)/Photino.Native.so `pkg-config --cflags --libs gtk+-3.0 webkit2gtk-4.0` -fPIC'
+        script: 'gcc -std=c++11 -shared -DOS_LINUX ./Shared/Exports.cpp ./Linux/Photino.cpp -o ./x64/$(buildConfiguration)/Photino.Native.so `pkg-config --cflags --libs gtk+-3.0 webkit2gtk-4.0` -fPIC'
 
     - task: CmdLine@2
       displayName: 'Create output folder for MacOS'
@@ -78,7 +78,7 @@ jobs:
       condition: eq(variables.rid, 'osx-x64')
       inputs:
         workingDirectory: './Photino.Native'
-        script: 'gcc -shared -lstdc++ -DOS_MAC -framework Cocoa -framework WebKit Photino.Mac.mm Exports.cpp Photino.Mac.AppDelegate.mm Photino.Mac.UiDelegate.mm Photino.Mac.UrlSchemeHandler.m -o x64/$(buildConfiguration)/Photino.Native.dylib'
+        script: 'gcc -shared -lstdc++ -DOS_MAC -framework Cocoa -framework WebKit ./Shared/Exports.cpp ./macOS/AppDelegate.mm ./macOS/UiDelegate.mm ./macOS/UrlSchemeHandler.mm  ./macOS/Photino.mm -o ./x64/$(buildConfiguration)/Photino.Native.dylib'
 
     #Publish native output to Artifacts
     - task: PublishPipelineArtifact@1

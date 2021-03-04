@@ -1,9 +1,10 @@
-#import <Cocoa/Cocoa.h>
-#import <WebKit/WebKit.h>
+#pragma once
+#include <Cocoa/Cocoa.h>
+#include <WebKit/WebKit.h>
 
 typedef void* (*WebResourceRequestedCallback) (char* url, int* outNumBytes, char** outContentType);
 
-@interface MyUrlSchemeHandler : NSObject <WKURLSchemeHandler> {
+@interface PhotinoUrlSchemeHandler : NSObject <WKURLSchemeHandler> {
     @public
     WebResourceRequestedCallback requestHandler;
 }

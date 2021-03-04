@@ -1,14 +1,16 @@
 // For this to build on WSL (Ubuntu 18.04) you need to:
 //  sudo apt-get install libgtk-3-dev libwebkit2gtk-4.0-dev
 #ifdef OS_LINUX
-#include "Photino.h"
 #include <mutex>
 #include <condition_variable>
+#include <sstream>
+#include <iomanip>
+
 #include <X11/Xlib.h>
 #include <webkit2/webkit2.h>
 #include <JavaScriptCore/JavaScript.h>
-#include <sstream>
-#include <iomanip>
+
+#include "../Shared/Photino.h"
 
 std::mutex invokeLockMutex;
 

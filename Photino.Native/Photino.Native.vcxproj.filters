@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Exports.cpp">
+    <ClCompile Include="Shared\Exports.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Photino.Windows.cpp">
+    <ClCompile Include="Windows\Photino.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Photino.Linux.cpp">
+    <ClCompile Include="Linux\Photino.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -30,7 +30,7 @@
     <None Include="Photino.Native.nuspec" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Photino.h">
+    <ClInclude Include="Shared\Photino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

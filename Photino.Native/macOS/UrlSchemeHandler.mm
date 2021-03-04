@@ -1,6 +1,6 @@
-#import "Photino.Mac.UrlSchemeHandler.h"
+#include "UrlSchemeHandler.h"
 
-@implementation MyUrlSchemeHandler : NSObject
+@implementation PhotinoUrlSchemeHandler : NSObject
 
 - (void)webView:(WKWebView *)webView startURLSchemeTask:(id <WKURLSchemeTask>)urlSchemeTask
 {

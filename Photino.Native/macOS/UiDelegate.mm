@@ -1,6 +1,6 @@
-#import "Photino.Mac.UiDelegate.h"
+#include "UiDelegate.h"
 
-@implementation MyUiDelegate : NSObject
+@implementation PhotinoUiDelegate : NSObject
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
 {
@@ -71,7 +71,7 @@
     photino->InvokeMoved(x, y);
 }
 
-- (bool)windowShouldClose:(NSWindow *)sender {
+- (bool)windowWillClose:(NSWindow *)sender {
     NSAlert *alert = [[NSAlert alloc] init];
     [alert addButtonWithTitle:@"Yes"];
     [alert addButtonWithTitle:@"No"];
@@ -82,10 +82,10 @@
     NSInteger result = [alert runModal];
 
     if ( result == NSAlertFirstButtonReturn ) {
-        photino->InvokeClosing(result);
-        return true;
+        photino->InvokeClosing();
+        return YES;
     } else {
-        return false;
+        return NO;
     }
 }
 
