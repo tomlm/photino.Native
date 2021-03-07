@@ -98,7 +98,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			Photino* Photino = hwndToPhotino[hwnd];
 			if (Photino)
 			{
-				Photino->InvokeClosing();
+				Photino->InvokeWindowClosing();
 				InvokeWaitInfo* waitInfo = (InvokeWaitInfo*)lParam;
 				{
 					std::lock_guard<std::mutex> guard(invokeLockMutex);

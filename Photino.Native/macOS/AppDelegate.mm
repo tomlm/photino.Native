@@ -9,12 +9,11 @@
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
-    [window makeKeyAndOrderFront:nil];
     [NSApp activateIgnoringOtherApps:YES];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
-    return true;
+    return NO;
 }
 
 - (void)dealloc {

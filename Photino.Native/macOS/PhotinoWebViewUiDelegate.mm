@@ -1,6 +1,6 @@
-#include "UiDelegate.h"
+#include "PhotinoWebViewUiDelegate.h"
 
-@implementation PhotinoUiDelegate : NSObject
+@implementation PhotinoWebViewUiDelegate : NSObject
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
 {
@@ -16,7 +16,7 @@
     [alert setInformativeText:message];
     [alert addButtonWithTitle:@"OK"];
 
-    [alert beginSheetModalForWindow:window completionHandler:^void (NSModalResponse response) {
+    [alert beginSheetModalForWindow:nativeWindow completionHandler:^void (NSModalResponse response) {
         completionHandler();
         [alert release];
     }];
@@ -32,7 +32,7 @@
     [alert addButtonWithTitle:@"OK"];
     [alert addButtonWithTitle:@"Cancel"];
 
-    [alert beginSheetModalForWindow:window completionHandler:^void (NSModalResponse response) {
+    [alert beginSheetModalForWindow:nativeWindow completionHandler:^void (NSModalResponse response) {
         completionHandler(response == NSAlertFirstButtonReturn);
         [alert release];
     }];
@@ -52,41 +52,11 @@
     [input setStringValue:defaultText];
     [alert setAccessoryView:input];
     
-    [alert beginSheetModalForWindow:window completionHandler:^void (NSModalResponse response) {
+    [alert beginSheetModalForWindow:nativeWindow completionHandler:^void (NSModalResponse response) {
         [input validateEditing];
         completionHandler(response == NSAlertFirstButtonReturn ? [input stringValue] : nil);
         [alert release];
     }];
-}
-
-- (void)windowDidResize:(NSNotification *)notification {
-    int width, height;
-    photino->GetSize(&width, &height);
-    photino->InvokeResized(width, height);
-}
-
-- (void)windowDidMove:(NSNotification *)notification {
-    int x, y;
-    photino->GetPosition(&x, &y);
-    photino->InvokeMoved(x, y);
-}
-
-- (bool)windowWillClose:(NSWindow *)sender {
-    NSAlert *alert = [[NSAlert alloc] init];
-    [alert addButtonWithTitle:@"Yes"];
-    [alert addButtonWithTitle:@"No"];
-    [alert setMessageText:@"Are you sure you want to quit?"];
-    // [alert setInformativeText:@"Quiting will stop the machine, please make sure it is back to its origin."];
-    [alert setAlertStyle:NSAlertStyleWarning];
-    [alert setShowsSuppressionButton:YES];
-    NSInteger result = [alert runModal];
-
-    if ( result == NSAlertFirstButtonReturn ) {
-        photino->InvokeClosing();
-        return YES;
-    } else {
-        return NO;
-    }
 }
 
 @end

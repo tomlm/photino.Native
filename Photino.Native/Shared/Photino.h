@@ -114,7 +114,7 @@ class Photino
         void Invoke(ACTION callback);
         void InvokeResized(int width, int height) { if (_resizedCallback) _resizedCallback(width, height); }
         void InvokeMoved(int x, int y) { if (_movedCallback) _movedCallback(x, y); }
-        void InvokeClosing() { if (_closingCallback) _closingCallback(); }
+        void InvokeWindowClosing() { if (_closingCallback) _closingCallback(); }
 
         void SetResizedCallback(ResizedCallback callback) { _resizedCallback = callback; }
         void SetMovedCallback(MovedCallback callback) { _movedCallback = callback; }

@@ -1,5 +1,5 @@
 CC=c++
-CFLAGS=-Wall -O2
+CFLAGS=-Wall -O2 -std=c++11
 DLLFLAGS=-shared -fpic
 
 SRC=./Photino.Native
@@ -61,7 +61,8 @@ build-mac-dev:
 		-framework Cocoa -framework WebKit\
 		$(SRC_SHARED)/Structs/*.cpp\
 		$(SRC_MAC)/AppDelegate.mm\
-		$(SRC_MAC)/UiDelegate.mm\
+		$(SRC_MAC)/PhotinoWebViewUiDelegate.mm\
+		$(SRC_MAC)/PhotinoWindowDelegate.mm\
 		$(SRC_MAC)/UrlSchemeHandler.mm\
 		$(SRC_MAC)/Photino.mm\
 		$(SRC)/Exports.mm\

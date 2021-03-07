@@ -47,7 +47,7 @@ extern "C"
     
     EXPORTED void Photino_SetResizedCallback(Photino* instance, ResizedCallback callback);
     EXPORTED void Photino_SetMovedCallback(Photino* instance, MovedCallback callback);
-    EXPORTED void Photino_SetClosingCallback(Photino* instance, ClosingCallback callback);
+    EXPORTED void Photino_SetWindowClosingCallback(Photino* instance, ClosingCallback callback);
     
     /**
      * Getters & Setters
